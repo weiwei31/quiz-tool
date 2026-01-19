@@ -5,44 +5,69 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>資安教育訓練小考</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* 互動反饋顏色設定 */
+        .choice-input:checked + .choice-box {
+            border-color: #26C6B6 !important;
+            background-color: rgba(38, 198, 182, 0.05);
+            color: #1a8e82;
+        }
+        .choice-input:checked + .choice-box .radio-dot {
+            background-color: #26C6B6;
+            border-color: #26C6B6;
+        }
+    </style>
 </head>
-<body class="bg-gray-50 min-h-screen py-10 px-4">
-    <div class="max-w-2xl mx-auto bg-white shadow-xl rounded-2xl p-8">
-        <header class="text-center mb-8">
-            <h1 class="text-3xl font-bold text-gray-800">資安教育訓練小考</h1>
-            <p class="text-gray-500 mt-2">請輸入姓名並開始答題</p>
+<body class="bg-slate-50 min-h-screen py-12 px-4 font-sans text-slate-700">
+    <div class="max-w-2xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-4xl font-extrabold text-slate-800 tracking-tight">資安教育訓練小考</h1>
+            <p class="text-slate-500 mt-3 text-lg">究竟 剛剛有沒有認真聽呢 讓我們繼續看下去</p>
         </header>
 
-        <div id="login-section" class="space-y-4">
-            <input type="text" id="userName" placeholder="請輸入你的姓名" class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
-            <button onclick="startQuiz()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition">我準備好了！</button>
-        </div>
-
-        <div id="quiz-section" class="hidden space-y-8">
-            <div id="questions-container" class="space-y-6">
-                <p class="text-center text-gray-400">載入題目中...</p>
+        <div id="login-section" class="bg-white shadow-xl shadow-slate-200/50 rounded-3xl p-10 text-center">
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-slate-500 mb-2">請輸入你的姓名</label>
+                <input type="text" id="userName" placeholder="例如：蔡佩縈" 
+                    class="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:ring-4 focus:ring-[#26C6B6]/20 focus:border-[#26C6B6] outline-none transition-all text-center text-xl font-bold">
             </div>
-            <button onclick="submitQuiz()" id="submit-btn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg transition">我要交券了</button>
+            <button onclick="startQuiz()" class="w-full bg-[#26C6B6] hover:bg-[#1fb3a4] text-white font-bold py-4 rounded-2xl shadow-lg shadow-[#26C6B6]/30 transition-all active:scale-[0.98]">
+                我準備好了，開始吧！
+            </button>
         </div>
 
-        <div id="result-section" class="hidden text-center space-y-4">
-            <div class="text-6xl font-bold text-blue-600" id="final-score">0</div>
-            <p class="text-xl text-gray-700"><span id="display-name"></span>，測驗完成！</p>
-            <p class="text-gray-500">成績已自動同步至後台。</p>
+        <div id="quiz-section" class="hidden space-y-6">
+            <div id="questions-container" class="space-y-6">
+                </div>
+            <div class="pt-6">
+                <button onclick="submitQuiz()" id="submit-btn" 
+                    class="w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-5 rounded-3xl shadow-xl transition-all active:scale-[0.98]">
+                    我寫完了，要交券
+                </button>
+            </div>
+        </div>
+
+        <div id="result-section" class="hidden bg-white shadow-2xl rounded-[2.5rem] p-12 text-center border-t-8 border-[#26C6B6]">
+            <div class="inline-flex items-center justify-center w-24 h-24 bg-[#26C6B6]/10 rounded-full mb-6">
+                <span class="text-5xl">🏆</span>
+            </div>
+            <h2 class="text-2xl font-bold text-slate-800 mb-2">測驗完成！</h2>
+            <p class="text-slate-500 mb-6 text-lg"><span id="display-name" class="text-slate-800 font-bold"></span>，你的得分是</p>
+            <div class="text-8xl font-black text-[#26C6B6] mb-8" id="final-score">0</div>
+            <p class="text-sm text-slate-400">分數已自動傳送到後台，我們稍後公布大家的分數！</p>
         </div>
     </div>
 
     <script>
-        // 1. 將這裡替換成你的 Google Apps Script 網址
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbw_r6EwgODpVudjvbHIzfjw64SSlCcNZrHRks6ZpD7shctFkKiaCwhDVoAfl9n5RRA7hA/exec';
+        // ⚠️ 請換成你的 Google Apps Script 網址
+        const scriptURL = 'YOUR_SCRIPT_URL_HERE';
         
         let questionsData = [];
         let userName = "";
 
-        // 開始測驗：抓取資料
         async function startQuiz() {
             userName = document.getElementById('userName').value.trim();
-            if (!userName) return alert("請輸入姓名！");
+            if (!userName) return alert("請輸入姓名以開始測驗！");
 
             document.getElementById('login-section').classList.add('hidden');
             document.getElementById('quiz-section').classList.remove('hidden');
@@ -51,56 +76,77 @@
                 const response = await fetch(scriptURL);
                 questionsData = await response.json();
                 renderQuestions();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             } catch (error) {
-                alert("抓取題目失敗，請檢查網路或試算表設定！");
+                alert("抓取題目失敗，請確認網路連線！");
             }
         }
 
-        // 渲染題目到畫面上
         function renderQuestions() {
             const container = document.getElementById('questions-container');
             container.innerHTML = "";
             
             questionsData.forEach((q, index) => {
-                const qDiv = document.createElement('div');
-                qDiv.className = "p-4 border-l-4 border-blue-500 bg-blue-50 rounded-r-lg";
-                qDiv.innerHTML = `
-                    <p class="font-bold text-lg text-gray-800 mb-3">${index + 1}. ${q.Question}</p>
-                    <div class="space-y-2">
+                const isBonus = String(q.IsBonus).toLowerCase() === 'yes';
+                const qCard = document.createElement('div');
+                qCard.className = "bg-white shadow-md shadow-slate-200/60 rounded-3xl p-8 border border-slate-50 relative overflow-hidden";
+                
+                // 加分題視覺標籤
+                const bonusTag = isBonus ? 
+                    `<div class="absolute top-0 right-0 bg-orange-400 text-white text-[10px] font-bold px-4 py-1 rounded-bl-xl uppercase tracking-widest shadow-sm">加分題 +5pt</div>` : '';
+
+                qCard.innerHTML = `
+                    ${bonusTag}
+                    <div class="flex items-start mb-6">
+                        <span class="bg-slate-100 text-slate-500 font-bold px-3 py-1 rounded-lg text-sm mr-3">Q${index + 1}</span>
+                        <h3 class="text-xl font-bold text-slate-800 leading-snug">${q.Question}</h3>
+                    </div>
+                    <div class="grid gap-3">
                         ${['A', 'B', 'C', 'D'].map(opt => `
-                            <label class="flex items-center space-x-3 cursor-pointer p-2 hover:bg-white rounded transition">
-                                <input type="radio" name="q${index}" value="${opt}" class="w-4 h-4 text-blue-600">
-                                <span>${q['Option' + opt]}</span>
+                            <label class="relative cursor-pointer">
+                                <input type="radio" name="q${index}" value="${opt}" class="hidden choice-input">
+                                <div class="choice-box flex items-center px-6 py-4 border-2 border-slate-100 rounded-2xl hover:bg-slate-50 hover:border-slate-200 transition-all duration-200">
+                                    <div class="radio-dot w-4 h-4 rounded-full border-2 border-slate-300 mr-4 transition-all"></div>
+                                    <span class="text-lg font-medium">${q['Option' + opt]}</span>
+                                </div>
                             </label>
                         `).join('')}
                     </div>
                 `;
-                container.appendChild(qDiv);
+                container.appendChild(qCard);
             });
         }
 
-        // 提交並計算分數
         async function submitQuiz() {
             const btn = document.getElementById('submit-btn');
+            const originalText = btn.innerText;
             btn.disabled = true;
-            btn.innerText = "提交中...";
+            btn.innerText = "計算分數並上傳中...";
 
-            let score = 0;
+            let totalScore = 0;
             let userAnswers = {};
-            const scorePerQuestion = 100 / questionsData.length;
+            
+            // 計分邏輯
+            const normalQuestions = questionsData.filter(q => String(q.IsBonus).toLowerCase() !== 'yes');
+            const scorePerNormal = normalQuestions.length > 0 ? 100 / normalQuestions.length : 0;
+            const bonusPointsPerQuestion = 5;
 
             questionsData.forEach((q, index) => {
                 const selected = document.querySelector(`input[name="q${index}"]:checked`);
-                const answer = selected ? selected.value : "";
-                userAnswers[`Q${index+1}`] = answer;
-                if (answer === q.Answer) {
-                    score += scorePerQuestion;
+                const userAnswer = selected ? selected.value : "";
+                userAnswers[`Q${index+1}`] = userAnswer;
+
+                if (userAnswer === q.Answer) {
+                    if (String(q.IsBonus).toLowerCase() === 'yes') {
+                        totalScore += bonusPointsPerQuestion;
+                    } else {
+                        totalScore += scorePerNormal;
+                    }
                 }
             });
 
-            const finalScore = Math.round(score);
+            const finalScore = Math.round(totalScore);
 
-            // 送回 Google Sheets
             try {
                 await fetch(scriptURL, {
                     method: 'POST',
@@ -111,15 +157,15 @@
                     })
                 });
 
-                // 顯示結果
                 document.getElementById('quiz-section').classList.add('hidden');
                 document.getElementById('result-section').classList.remove('hidden');
                 document.getElementById('display-name').innerText = userName;
                 document.getElementById('final-score').innerText = finalScore;
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             } catch (error) {
-                alert("儲存分數失敗！請火速舉手。");
+                alert("儲存分數失敗，請火速舉手。");
                 btn.disabled = false;
-                btn.innerText = "重新提交";
+                btn.innerText = originalText;
             }
         }
     </script>
