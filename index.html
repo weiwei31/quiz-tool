@@ -3,26 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>線上小測驗</title>
+    <title>資安教育訓練小考</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-50 min-h-screen py-10 px-4">
     <div class="max-w-2xl mx-auto bg-white shadow-xl rounded-2xl p-8">
         <header class="text-center mb-8">
-            <h1 class="text-3xl font-bold text-gray-800">知識小測驗</h1>
+            <h1 class="text-3xl font-bold text-gray-800">資安教育訓練小考</h1>
             <p class="text-gray-500 mt-2">請輸入姓名並開始答題</p>
         </header>
 
         <div id="login-section" class="space-y-4">
             <input type="text" id="userName" placeholder="請輸入你的姓名" class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
-            <button onclick="startQuiz()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition">開始考試</button>
+            <button onclick="startQuiz()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition">我準備好了！</button>
         </div>
 
         <div id="quiz-section" class="hidden space-y-8">
             <div id="questions-container" class="space-y-6">
                 <p class="text-center text-gray-400">載入題目中...</p>
             </div>
-            <button onclick="submitQuiz()" id="submit-btn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg transition">提交考卷</button>
+            <button onclick="submitQuiz()" id="submit-btn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg transition">我要交券了</button>
         </div>
 
         <div id="result-section" class="hidden text-center space-y-4">
@@ -117,7 +117,7 @@
                 document.getElementById('display-name').innerText = userName;
                 document.getElementById('final-score').innerText = finalScore;
             } catch (error) {
-                alert("儲存分數失敗，請聯絡考官。");
+                alert("儲存分數失敗！請火速舉手。");
                 btn.disabled = false;
                 btn.innerText = "重新提交";
             }
