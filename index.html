@@ -30,13 +30,13 @@
     <div class="max-w-2xl mx-auto">
         <header class="text-center mb-10">
             <h1 class="text-4xl font-extrabold text-slate-800 tracking-tight">資安教育訓練小考</h1>
-            <p class="text-slate-500 mt-3 text-lg">究竟 剛剛有沒有認真聽呢 讓我們繼續看下去</p>
+            <p class="text-slate-500 mt-3 text-lg">我會考一百分~搞不好一百多分 </p>
         </header>
 
         <div id="login-section" class="bg-white shadow-xl shadow-slate-200/50 rounded-3xl p-10 text-center transition-all">
             <div class="mb-6">
                 <label class="block text-sm font-medium text-slate-500 mb-2">請輸入你的姓名</label>
-                <input type="text" id="userName" placeholder="例如：蔡佩縈" 
+                <input type="text" id="userName" placeholder="例如：江寶" 
                     class="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:ring-4 focus:ring-[#26C6B6]/20 focus:border-[#26C6B6] outline-none transition-all text-center text-xl font-bold">
             </div>
             <button id="start-btn" onclick="startQuiz()" class="w-full bg-[#26C6B6] hover:bg-[#1fb3a4] text-white font-bold py-4 rounded-2xl shadow-lg shadow-[#26C6B6]/30 transition-all flex items-center justify-center space-x-2">
@@ -58,7 +58,7 @@
             <h2 class="text-2xl font-bold text-slate-800 mb-2">測驗完成！</h2>
             <p class="text-slate-500 mb-6 text-lg"><span id="display-name" class="text-slate-800 font-bold"></span>，你的得分是</p>
             <div class="text-8xl font-black text-[#26C6B6] mb-8" id="final-score">0</div>
-            <p class="text-sm text-slate-400">分數已自動同步至雲端。</p>
+            <p class="text-sm text-slate-400">分數已自動同步至雲端，稍後會公布大家的成績！</p>
         </div>
     </div>
 
@@ -129,7 +129,7 @@
         async function submitQuiz() {
             const btn = document.getElementById('submit-btn');
             btn.disabled = true;
-            btn.innerText = "提交中...";
+            btn.innerText = "交券中...";
             let totalScore = 0;
             let userAnswers = {};
             const normalQs = questionsData.filter(q => String(q.IsBonus).toLowerCase() !== 'yes');
